@@ -1,0 +1,16 @@
+config DEBUG_KERNEL
+	bool "Kernel debugging"
+	default y
+	help
+	  Say Y here if you are developing drivers or trying to debug and
+	  identify kernel problems.
+
+config FRAME_POINTER
+        bool "Compile the kernel with frame pointers"
+        depends on DEBUG_KERNEL || ARCH_WANT_FRAME_POINTERS
+        default y if ARCH_WANT_FRAME_POINTERS
+        help
+          If you say Y here the resulting kernel image will be slightly
+          larger and slower, but it gives very useful debugging information
+          in case of kernel bugs. (precise oopses/stacktraces/warnings)
+

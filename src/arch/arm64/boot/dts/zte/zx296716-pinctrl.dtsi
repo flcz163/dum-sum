@@ -1,0 +1,325 @@
+/*
+ * ZX296718 SoC pin-mux and pin-config device tree source
+ *
+ * Copyright (c) 2016 ZTE Semiconductor Co., Ltd.
+ *
+ * zx296718 SoC pin-mux options are listed as
+ * device tree nodes in this file.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+*/
+/* audio-dma mux */
+&sysctrl_dma {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0x1>;
+};
+
+/* aon pinmux */
+&pinctrl_aon0 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0x3>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_aon0 0 2 1 &range_aon0 4 12 1>;
+
+	range_aon0: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_aon1 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0x3>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_aon1 0 13 1>;
+
+	range_aon1: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_aon2 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0x3>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_aon2 6 9 1>;
+
+	range_aon2: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+/* top pinmux */
+&pinctrl_global0 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0xf>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_global0 0 6 2 &range_global0 6 2 1>;
+
+	range_global0: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_global1 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0xf>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_global1 0 2 1 &range_global1 2 4 2 &range_global1 6 1 1 &range_global1 7 1 2>;
+
+	range_global1: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_global2 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0xf>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_global2 0 1 2 &range_global2 1 4 1 &range_global2 5 3 2>;
+
+	range_global2: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_global3 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0xf>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_global3 0 2 2 &range_global3 2 1 1 &range_global3 3 5 2>;
+
+	range_global3: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+&pinctrl_global4 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0xf>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_global4 0 1 2 &range_global4 1 4 1 &range_global4 5 3 2>;
+
+	range_global4: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_global5 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0xf>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_global5 0 1 2 &range_global5 3 4 2>;
+
+	range_global5: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+&pinctrl_global6 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0xf>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_global6 1 7 1>;
+
+	range_global6: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_global7 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0xf>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_global7 0 1 1>;
+
+	range_global7: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_global8 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0xf>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_global8 5 1 2 &range_global8 6 2 3>;
+
+	range_global8: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_global9 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0xf>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_global9 0 8 3>;
+
+	range_global9: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_global10 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0xf>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_global10 0 2 3 &range_global10 2 6 2>;
+
+	range_global10: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_global11 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0xf>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_global11 0 8 2>;
+
+	range_global11: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_global12 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0xf>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_global12 0 8 2>;
+
+	range_global12: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_global13 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0xf>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_global13 0 2 2>;
+
+	range_global13: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_global14 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0xf>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_global14 0 8 3>;
+
+	range_global14: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_global15 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0xf>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_global15 0 1 1>;
+
+	range_global15: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};

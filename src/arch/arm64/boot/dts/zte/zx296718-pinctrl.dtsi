@@ -1,0 +1,157 @@
+/*
+ * ZX296718 SoC pin-mux and pin-config device tree source
+ *
+ * Copyright (c) 2016 ZTE Semiconductor Co., Ltd.
+ *
+ * zx296718 SoC pin-mux options are listed as
+ * device tree nodes in this file.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+*/
+
+
+&pinctrl_global {
+	pinctrl-zx,gpio-range = <&range_global 0 11 2 &range_global 11 3 3 &range_global 14 12 2
+			    &range_global 26 1 1 &range_global 27 4 2 &range_global 31 4 1 &range_global 35 4 2
+			    &range_global 41 4 2 &range_global 47 8 1 &range_global 67 1 2 &range_global 68 36 3
+			    &range_global 108 9 3 &range_global 117 1 2>;
+	spi_nor: spi-nor-bus {
+		pinctrl-zx,function;
+		pinctrl-zx,pins = "p1-11", "p1-12", "p1-13", "p1-14", "p1-15", "p2-0";
+		pinctrl-zx,config = /bits/ 8 <3 3 3 3 2 2>;
+	};
+
+	sdio1_base: sdio1_base {
+		pinctrl-zx,function;
+		pinctrl-zx,pins = "p1-11", "p1-12", "p1-13", "p2-1";
+		pinctrl-zx,config = /bits/ 8 <1 1 1 1>;
+	};
+
+	sdio1_4bit_plus: sdio1_4bit_plus {
+		pinctrl-zx,function;
+		pinctrl-zx,pins = "p1-14", "p1-15", "p2-0";
+		pinctrl-zx,config = /bits/ 8 <2 2 2>;
+	};
+
+	lvds_global_pin: lvds_global_pin{
+		pinctrl-zx,function;
+		pinctrl-zx,pins = "p4-2";
+		pinctrl-zx,config = /bits/ 8 <3>;
+	};
+
+	top_keyrow2_pin_sel_pwm_out3: top_keyrow2_pin_sel_pwm_out3 {
+		pinctrl-zx,function;
+		pinctrl-zx,pins = "p3-20";/* lb_ares0_pmm_reg_3 27,28bit */
+		pinctrl-zx,config = /bits/ 8 <2>;/* p3-20 select to b10 */
+	};
+
+	top_keyrow1_pin_sel_pwm_out2: top_keyrow1_pin_sel_pwm_out2 {
+		pinctrl-zx,function;
+		pinctrl-zx,pins = "p3-19";/* lb_ares0_pmm_reg_3 25,26bit */
+		pinctrl-zx,config = /bits/ 8 <2>;/* p3-19 select to b10 */
+	};
+
+	top_keycol2_pin_sel_pwm_out1: top_keycol2_pin_sel_pwm_out1 {
+		pinctrl-zx,function;
+		pinctrl-zx,pins = "p3-18";/* lb_ares0_pmm_reg_3 23,24bit */
+		pinctrl-zx,config = /bits/ 8 <0>;/* p3-18 select to b00 */
+	};
+
+	top_i2c5_scl_pin_sel_pwm_out2: top_i2c5_scl_pin_sel_pwm_out2 {
+		pinctrl-zx,function;
+		pinctrl-zx,pins = "p6-6";/* lb_ares0_pmm_reg_6 17~19bit */
+		pinctrl-zx,config = /bits/ 8 <4>;/* p6-6 select to b100 */
+	};
+
+	top_i2c5_sda_pin_sel_pwm_out3: top_i2c5_sda_pin_sel_pwm_out3 {
+		pinctrl-zx,function;
+		pinctrl-zx,pins = "p6-7";/* lb_ares0_pmm_reg_7 20~22bit */
+		pinctrl-zx,config = /bits/ 8 <4>;/* p6-6 select to b100 */
+	};
+
+	spdif1_global_pin: spdif1_global_pin {
+		pinctrl-zx,function;
+		pinctrl-zx,pins = "p3-11";
+		pinctrl-zx,config = /bits/ 8 <0>;
+	};
+	i2s1_global_pin: i2s1_global_pin {
+		pinctrl-zx,function;
+		pinctrl-zx,pins = "p5-8", "p5-9", "p5-10", "p6-0", "p6-1", "p6-2", "p6-3", "p6-4", "p6-5", "p6-6", "p6-7";
+		pinctrl-zx,config = /bits/ 8 <6 6 6 6 0 0 0 0 0 5 5>;
+	};
+    
+
+	i2s2_global_pin: i2s2_global_pin {
+		pinctrl-zx,function;
+		pinctrl-zx,pins = "p4-11", "p4-12", "p4-13", "p5-0", "p5-1", "p5-2", "p5-3", "p5-4", "p5-5", "p5-6", "p5-7";
+		pinctrl-zx,config = /bits/ 8 <4 4 4 4 4 4 0 0 0 0 0>;
+	};
+
+    /* 由于有2个I2C3复用,p2-7 p2-8 将复用指向非I2C3的复用管脚(SPI2_TXD;SPI2_RXD) */
+    /* p6-10这里将复用指向I2C3的复用管脚 I2C3 SCL */
+    /* p7-0这里将复用指向I2C3的复用管脚 I2C3 SDA */
+	i2c3_global_pin:i2c3_global_pin {
+		pinctrl-zx,function;
+		pinctrl-zx,pins = "p2-7", "p2-8", "p6-10", "p7-0";
+		pinctrl-zx,config = /bits/ 8 <1 1 4 4>; /* bits 寄存器宽度 */
+	};
+	
+	uart5_global_pin: uart5_global_pin {
+		pinctrl-zx,function;
+		pinctrl-zx,pins = "p5-8", "p5-9", "p5-10","p6-0" ;
+		pinctrl-zx,config = /bits/ 8 <4 4 4 4>;
+	};
+	
+	range_global: gpio-range {
+		#pinctrl-zx,gpio-range-cells = <3>;
+	};
+};
+&pinctrl_aon0 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0x3>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_aon0 0 2 1 &range_aon0 4 12 1>;
+
+	range_aon0: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_aon1 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0x3>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_aon1 0 12 1>;
+
+	range_aon1: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};
+
+&pinctrl_aon2 {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	pinctrl-single,bit-per-mux;
+	pinctrl-single,register-width = <32>;
+	pinctrl-single,function-mask = <0x3>;
+
+	/* pin base, nr pins & gpio function */
+	pinctrl-single,gpio-range = <&range_aon2 6 5 1>;
+
+	range_aon2: gpio-range {
+		#pinctrl-single,gpio-range-cells = <3>;
+	};
+};

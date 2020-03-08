@@ -1,0 +1,9 @@
+menu "Kernel hacking"
+
+source "lib/Kconfig.debug"
+
+config FRAME_POINTER
+        bool
+        default y
+
+endmenu

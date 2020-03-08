@@ -1,0 +1,96 @@
+/*
+ * ZTE Ltd. zx296718 Plaform
+ *
+ */
+/dts-v1/;
+#include "zx296716.dtsi"
+
+/ {
+	model = "ZXIC ZX296716";
+	compatible = "zte,zx296716-evb", "zte,zx296716";
+
+	chosen {
+		bootargs = "console=ttyS0,115200 earlyprintk";
+	};
+
+	memory@40000000 {
+		device_type = "memory";
+		reg = <0x40000000 0x10000000>;
+	};
+};
+&mmc0{
+	status = "okay";
+};
+&mmc1{
+	fifo-depth = <512>;
+        clock-frequency = <100000000>;
+        max-frequency = <50000000>;
+        DS0_config_val = <0x804020>;
+        DS1_config_val = <0x804020>;
+	status = "okay"; /*disabled if evb*/
+};
+&mmc2{
+	status = "okay";/*disabled if evb*/
+};
+&audio_i2c0 {	
+    	status = "disabled";       
+};
+
+&lsp0_i2c3 {	
+    	status = "okay";       
+};
+&spdif0{
+    #sound-dai-cells = <0>;
+    status = "ok";
+};
+
+&dma {
+	status = "ok";
+};
+&irdec {
+	status = "ok";
+};
+
+&spdif1 {
+    #sound-dai-cells = <0>;
+    status = "ok";
+};
+
+
+&i2s0 {
+	#sound-dai-cells = <0>;
+	status = "okay";
+};
+&i2s1 {
+	#sound-dai-cells = <0>;
+	status = "disabled";
+};
+
+&i2s2 {
+	#sound-dai-cells = <0>;
+	status = "disabled";
+};
+
+&i2s3 {
+	#sound-dai-cells = <0>;
+	status = "disabled";
+};
+
+&bgpio4 {
+	status = "okay";
+};
+
+&bdctrl {
+	gpios = <&bgpio3 10 0 &bgpio4 1 0 &bgpio2 3 0 &bgpio3 4 0 &agpio1 15 0>;
+	mute-gpio = <&bgpio4 0 0>;
+	/*hc-switch-gpio = <&bgpio4 2 0>;*/
+	no-hc-switch;
+};
+&zx_led {
+        powerred-gpio = <&agpio1 9 0>;          /*agpio25*/
+        powergreen-gpio = <&agpio0 8 0>;        /*agpio8*/
+        /*only-power;*/
+        netgreen-gpio = <&bgpio2 4 0>;			/*bgpio36*/
+        ir-gpio = <&agpio1 7 0>;          		/*agpio23*/
+        netred-gpio = <&bgpio2 5 0>;			/*bgpio37*/
+};

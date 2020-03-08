@@ -1,0 +1,2 @@
+`pwd`/../toolchains/gcc-linaro-5.3-2016.02-x86_64_aarch64-elf/bin/aarch64-elf-gdb vmlinux
+

@@ -1,0 +1,1351 @@
+/*
+ * ZTE Ltd. zx296718 Plaform
+ *
+ */
+#include <dt-bindings/arm/zte_pm_domains.h>
+#include <dt-bindings/clock/zx296718-clock.h>
+#include <dt-bindings/interrupt-controller/arm-gic.h>
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+/ {
+	compatible = "zte,zx296718";
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	aliases {
+		serial0 = &uart0;
+		serial1 = &uart5;
+		
+		pinctrl0 = &pinctrl_global;
+		pinctrl1 = &pinctrl_aon0;
+		pinctrl2 = &pinctrl_aon1;
+		pinctrl3 = &pinctrl_aon2;
+		gpio0 = &bgpio0;
+		gpio1 = &bgpio1;
+		gpio2 = &bgpio2;
+		gpio3 = &bgpio3;
+		gpio4 = &bgpio4;
+		gpio5 = &bgpio5;
+		gpio6 = &bgpio6;
+		gpio7 = &agpio0;
+		gpio8 = &agpio1;
+		spdif0 = &spdif0;
+		spdif1 = &spdif1;
+		i2s0 = &i2s0;
+		i2s1 = &i2s1;		
+		i2s2 = &i2s2;
+        i2s3 = &i2s3;
+		mshc0 = &mmc0;
+		mshc1 = &mmc1;
+		mshc2 = &mmc2;
+        i2c3 = &i2c3;
+		i2c4 = &i2c4;
+	};
+
+	cpus {
+		#address-cells = <2>;
+		#size-cells = <0>;
+
+		cpu-map {
+			cluster0 {
+				core0 {
+					cpu = <&cpu0>;
+				};
+				core1 {
+					cpu = <&cpu1>;
+				};
+				core2 {
+					cpu = <&cpu2>;
+				};
+				core3 {
+					cpu = <&cpu3>;
+				};
+				/*todo for a53 core1 to core3*/
+			};
+
+			cluster1 {
+				core0 {
+					cpu = <&cpu4>;
+				};
+				core1 {
+					cpu = <&cpu5>;
+				};
+			};
+		};
+		cpu0: cpu@0 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a53","arm,armv8";
+			reg = <0x0 0x0>;
+			enable-method = "psci";
+			/*cpu-idle-states = <&CPU_SLEEP_0_0 &CLUSTER_SLEEP_0>;*/
+		};
+
+		cpu1: cpu@1 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a53","arm,armv8";
+			reg = <0x0 0x1>;
+			enable-method = "psci";
+		};
+
+		cpu2: cpu@2 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a53","arm,armv8";
+			reg = <0x0 0x2>;
+			enable-method = "psci";
+		};
+
+		cpu3: cpu@3 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a53","arm,armv8";
+			reg = <0x0 0x3>;
+			enable-method = "psci";
+		};
+
+		cpu4: cpu@100 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a72","arm,armv8";
+			reg = <0x0 0x100>;
+			enable-method = "psci";
+		};
+
+		cpu5: cpu@101 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a72","arm,armv8";
+			reg = <0x0 0x101>;
+			enable-method = "psci";
+		};
+
+		idle-states {
+				entry-method = "arm,psci";
+
+				CPU_RETENTION_0_0: cpu-retention-0-0 {
+					compatible = "arm,idle-state";
+					arm,psci-suspend-param = <0x00000002>;
+					entry-latency-us = <20>;
+					exit-latency-us = <40>;
+					min-residency-us = <80>;
+				};
+
+				CLUSTER_RETENTION_0: cluster-retention-0 {
+					compatible = "arm,idle-state";
+					local-timer-stop;
+					arm,psci-suspend-param = <0x01001022>;
+					entry-latency-us = <50>;
+					exit-latency-us = <100>;
+					min-residency-us = <250>;
+					wakeup-latency-us = <130>;
+				};
+
+				CPU_SLEEP_0_0: cpu-sleep-0-0 {
+					compatible = "arm,idle-state";
+					local-timer-stop;
+					arm,psci-suspend-param = <0x00010003>;
+					entry-latency-us = <250>;
+					exit-latency-us = <500>;
+					min-residency-us = <950>;
+				};
+
+				CLUSTER_SLEEP_0: cluster-sleep-0 {
+					compatible = "arm,idle-state";
+					local-timer-stop;
+					arm,psci-suspend-param = <0x01011033>;
+					entry-latency-us = <600>;
+					exit-latency-us = <1100>;
+					min-residency-us = <2700>;
+					wakeup-latency-us = <1500>;
+				};
+
+				CPU_RETENTION_1_0: cpu-retention-1-0 {
+					compatible = "arm,idle-state";
+					arm,psci-suspend-param = <0x00000002>;
+					entry-latency-us = <20>;
+					exit-latency-us = <40>;
+					min-residency-us = <90>;
+				};
+
+				CLUSTER_RETENTION_1: cluster-retention-1 {
+					compatible = "arm,idle-state";
+					local-timer-stop;
+					arm,psci-suspend-param = <0x01001022>;
+					entry-latency-us = <50>;
+					exit-latency-us = <100>;
+					min-residency-us = <270>;
+					wakeup-latency-us = <100>;
+				};
+
+				CPU_SLEEP_1_0: cpu-sleep-1-0 {
+					compatible = "arm,idle-state";
+					local-timer-stop;
+					arm,psci-suspend-param = <0x00010003>;
+					entry-latency-us = <70>;
+					exit-latency-us = <100>;
+					min-residency-us = <300>;
+					wakeup-latency-us = <150>;
+				};
+
+				CLUSTER_SLEEP_1: cluster-sleep-1 {
+					compatible = "arm,idle-state";
+					local-timer-stop;
+					arm,psci-suspend-param = <0x01011033>;
+					entry-latency-us = <500>;
+					exit-latency-us = <1200>;
+					min-residency-us = <3500>;
+					wakeup-latency-us = <1300>;
+				};
+		};
+	};
+
+	reserved-memory {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		ranges;
+
+		multimedia_region: multimedia_region {
+			compatible = "shared-dma-pool";
+			reusable;
+			size = <0x14000000>; /* 320M */
+		};
+	};
+
+	memalloc {
+		memory-region = <&multimedia_region>;
+	};
+	
+	ion-device {
+		compatible = "zte,zx-ion";
+		memory-region = <&multimedia_region>;
+	};
+
+	soc {
+		#address-cells = <1>;
+		#size-cells = <1>;
+		compatible = "simple-bus";
+		interrupt-parent = <&gic>;
+		ranges;
+
+		osc12m: osc12m_clk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <12000000>;
+			clock-output-names = "osc12m";
+		};
+		osc24m: osc24m_clk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <24000000>;
+			clock-output-names = "osc24m";
+		};
+		osc25m: osc25m_clk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <25000000>;
+			clock-output-names = "osc25m";
+		};
+
+		clk24k: clk-24k {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <24000>;
+			clock-output-names = "zte:rtcclk";
+		};
+		osc32k: osc32k_clk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <32000>;
+			clock-output-names = "osc32k";
+		};
+		osc60m: osc60m_clk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <60000000>;
+			clock-output-names = "osc60m";
+		};
+		osc99m: osc99m_clk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <99000000>;
+			clock-output-names = "osc99m";
+		};
+	osc125m: osc125m_clk {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		clock-frequency = <125000000>;
+		clock-output-names = "osc125m";
+	};
+	osc198m: osc198m_clk {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		clock-frequency = <198000000>;
+		clock-output-names = "osc198m";
+	};
+		
+		/*pll_cpu: pll_1600m_clk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>; 
+			clock-frequency = <1600000000>;
+			clock-output-names = "pll_cpu";
+		};*/
+
+		pll_vga: pll_1073m_clk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>; 
+			clock-frequency = <1073000000>;
+			clock-output-names = "pll_vga";
+		};
+		
+		pll_ddr: pll_932m_clk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>; 
+			clock-frequency = <932000000>;
+			clock-output-names = "pll_ddr";
+		};
+
+		pll_mac: pll_1000m_clk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <1000000000>;
+			clock-output-names = "pll_mac";
+		};
+
+		pll_mm0: pll_1188m_clk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <1188000000>;
+			clock-output-names = "pll_mm0";
+		};
+
+		pll_mm1: pll_1296m_clk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <1296000000>;
+			clock-output-names = "pll_mm1";
+		};
+
+		pll_audio: pll_884m_clk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <884000000>;
+			clock-output-names = "pll_audio";
+		};
+
+		pll_hsic: pll_960m_clk {
+			compatible = "fixed-clock";
+			#clock-cells = <0>;
+			clock-frequency = <960000000>;
+			clock-output-names = "pll_hsic";
+		};
+
+		topcrm: clock-controller@01461000 {
+			compatible = "zte,zx296718-topcrm";
+			reg = <0x01461000 0x1000>;
+			#clock-cells = <1>;
+		};
+
+		lsp0crm: clock-controller@01420000 {
+			compatible = "zte,zx296718-lsp0crm";
+			reg = <0x01420000 0x1000>;
+			#clock-cells = <1>;
+		};
+
+		lsp1crm: clock-controller@01430000 {
+			compatible = "zte,zx296718-lsp1crm";
+			reg = <0x01430000 0x1000>;
+			#clock-cells = <1>;
+		};
+
+		audiocrm: clock-controller@01480000 {
+			compatible = "zte,zx-audiocrm";
+			reg = <0x01480000 0x1000>;
+			#clock-cells = <1>;
+		};
+
+		pinctrl_global: pinctrl@01462000 {
+			compatible = "zte,zx296718-pinctrl";
+			reg = <0x01462000 0x1000>;
+		};
+
+		pinctrl_aon0: pinctrl@00119000 {
+			compatible = "pinctrl-single";
+			reg = <0x00119000 0x4>;
+			aon_keycol2_out_top: aon_keycol2_out_top {
+				pinctrl-single,bits = <
+				/*	?		val			mask	*/
+					0	0x20000000	0x30000000
+				>;
+			};
+		};
+		pinctrl_aon1: pinctrl@00119004 {
+			compatible = "pinctrl-single";
+			reg = <0x00119004 0x4>;
+			aon_keyrow1_out_top: aon_keyrow1_out_top {
+				pinctrl-single,bits = <
+				/*	?	val		mask	*/
+					0	0x2		0x3
+				>;
+			};
+			aon_keyrow2_out_top: aon_keyrow2_out_top {
+				pinctrl-single,bits = <
+				/*	?	val		mask	*/
+					0	0x8		0xc
+				>;
+			};
+		};
+		pinctrl_aon2: pinctrl@00119008 {
+			compatible = "pinctrl-single";
+			reg = <0x00119008 0x4>;
+
+			spdif1_aon: spdif1_aon {
+				pinctrl-single,bits = <
+					0	0x8000	0xc000
+				>;
+			};
+		};
+				
+		agpio0: gpio@00110000 {
+			compatible = "zte,zx296718-gpio";
+			reg = <0x00110000 0x40>;
+			#gpio-cells = <2>;
+			gpio-ranges = <	&pinctrl_aon0 0 7 1 &pinctrl_aon2 1 8 2
+							&pinctrl_aon1 3 2 2 &pinctrl_aon0 5 12 4
+							&pinctrl_aon1 9 0 2 &pinctrl_aon1 11 4 5>;
+			interrupts = <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&gic>;
+			interrupt-controller;
+			#interrupt-cells = <2>;
+			power_gpio_key = <14>;
+			status = "disabled";
+		};
+
+		agpio1: gpio@00110040 {
+			compatible = "zte,zx296718-gpio";
+			reg = <0x00110040 0x40>;
+			#gpio-cells = <2>;
+			gpio-ranges = <	&pinctrl_aon1 0 9 4 &pinctrl_aon0 4 5 2
+							&pinctrl_aon2 6 7 1 &pinctrl_aon0 7 8 4
+							&pinctrl_aon2 11 6 1 &pinctrl_aon0 12 4 1
+							&pinctrl_aon0 13 0 2 &pinctrl_aon2 15 10 1>;
+			interrupts = <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&gic>;
+			interrupt-controller;
+			#interrupt-cells = <2>;
+			status = "disabled";
+		};
+		bgpio0: gpio@0142d000 {
+			compatible = "zte,zx296718-gpio";
+			reg = <0x142d000 0x40>;
+			gpio-controller;
+			#gpio-cells = <2>;
+			gpio-ranges = <&pinctrl_global 0 0 11 &pinctrl_global 11 11 3
+						   &pinctrl_global 14 14 2>;
+			interrupts = <GIC_SPI 49 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&gic>;
+			interrupt-controller;
+			#interrupt-cells = <2>;
+			status = "disabled";
+		};
+		bgpio1: gpio@0142d040 {
+			compatible = "zte,zx296718-gpio";
+			reg = <0x142d040 0x40>;
+			gpio-controller;
+			#gpio-cells = <2>;
+			gpio-ranges = <&pinctrl_global 0 16 10 &pinctrl_global 10 26 1
+						   &pinctrl_global 11 27 4 &pinctrl_global 15 31 1>;
+			interrupts = <GIC_SPI 50 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&gic>;
+			interrupt-controller;
+			#interrupt-cells = <2>;
+			status = "disabled";
+		};
+		bgpio2: gpio@0142d080 {
+			compatible = "zte,zx296718-gpio";
+			reg = <0x142d080 0x40>;
+			gpio-controller;
+			#gpio-cells = <2>;
+			gpio-ranges = <&pinctrl_global 0 32 3 &pinctrl_global 3 35 4
+						   &pinctrl_global 7 41 4 &pinctrl_global 11 47 5>;
+			interrupts = <GIC_SPI 51 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&gic>;
+			interrupt-controller;
+			#interrupt-cells = <2>;
+			status = "ok";
+		};
+		bgpio3: gpio@0142d0c0 {
+			compatible = "zte,zx296718-gpio";
+			reg = <0x142d0c0 0x40>;
+			gpio-controller;
+			#gpio-cells = <2>;
+			gpio-ranges = <&pinctrl_global 0 52 3 &pinctrl_global 3 67 1
+						   &pinctrl_global 4 68 12>;
+			interrupts = <GIC_SPI 52 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&gic>;
+			interrupt-controller;
+			#interrupt-cells = <2>;
+			status = "disabled";
+		};
+		bgpio4: gpio@0142d100 {
+			compatible = "zte,zx296718-gpio";
+			reg = <0x142d100 0x40>;
+			gpio-controller;
+			#gpio-cells = <2>;
+			gpio-ranges = <&pinctrl_global 0 80 16>;
+			interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&gic>;
+			interrupt-controller;
+			#interrupt-cells = <2>;
+			status = "disabled";
+		};
+		bgpio5: gpio@0142d140 {
+			compatible = "zte,zx296718-gpio";
+			reg = <0x142d140 0x40>;
+			gpio-controller;
+			#gpio-cells = <2>;
+			gpio-ranges = <&pinctrl_global 0 96 8 &pinctrl_global 8 108 8>;
+			interrupts = <GIC_SPI 54 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&gic>;
+			interrupt-controller;
+			#interrupt-cells = <2>;
+			status = "disabled";
+		};
+		bgpio6: gpio@0142d180 {
+			compatible = "zte,zx296718-gpio";
+			reg = <0x142d180 0x40>;
+			gpio-controller;
+			#gpio-cells = <2>;
+			gpio-ranges = <&pinctrl_global 0 116 1 &pinctrl_global 1 117 1>;
+			interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-parent = <&gic>;
+			interrupt-controller;
+			#interrupt-cells = <2>;
+			status = "disabled";
+		};
+		toprst: reset@1461060 {
+			compatible = "zte,zx296718-reset";
+			reg = <0x01461060 0x8>;
+			#reset-cells = <1>;
+		};		
+		aresrst: reset@146117c {
+			compatible = "zte,zx296718-reset";
+			reg = <0x0146117c 0x4>;
+			#reset-cells = <1>;
+		};
+		lbviulocalswrst: reset@1461114 {
+			compatible = "zte,zx296718-reset";
+			reg = <0x01461114 0x4>;
+			#reset-cells = <1>;
+		};	
+		gic: interrupt-controller@2a00000 {
+			compatible = "arm,gic-v3";
+			#interrupt-cells = <3>;
+			#address-cells = <0>;
+			#redistributor-regions = <6>;
+			redistributor-stride = <0x0 0x40000>;
+			interrupt-controller;
+			reg = <0x02a00000 0x10000>,
+				  <0x02b00000 0x20000>,
+				  <0x02b20000 0x20000>,
+				  <0x02b40000 0x20000>,
+				  <0x02b60000 0x20000>,
+				  <0x02b80000 0x20000>,
+				  <0x02ba0000 0x20000>;
+			interrupts = <GIC_PPI 9 0xf04>;
+		};
+		timer {
+			compatible = "arm,armv8-timer";
+			interrupts = <GIC_PPI 13 0xff01>,
+				     <GIC_PPI 14 0xff01>,
+				     <GIC_PPI 11 0xff01>,
+				     <GIC_PPI 10 0xff01>;
+		};
+
+		pmu {
+			compatible = "arm,armv8-pmuv3";
+			interrupts = <GIC_PPI 7 4>;
+		};
+
+		psci {
+			compatible = "arm,psci-1.0";
+			method = "smc";
+			cpu_suspend = <0xC4000001>;
+			cpu_off = <0x84000002>;
+			cpu_on = <0xC4000003>;
+			migrate = <0xC4000005>;
+		};
+		uart0: uart@11f000 {
+			compatible = "zte,zx296718-uart";
+			reg = <0x11f000 0x1000>;
+			interrupts = <GIC_SPI 101 4>;
+			clocks = <&osc24m>;
+			clock-names = "wclk";
+		};
+		uart5: uart@0x01433000 {
+			compatible = "zte,zx296718-uart";
+			reg = <0x01433000 0x1000>;
+			/*interrupt-parent = <&gic>;*/
+			interrupts = <GIC_SPI 62 4>;
+			clock-names = "wclk";
+			clocks = <&lsp1crm LSP1_UART5_WCLK>;
+			pinctrl-names = "uart_conf";
+			pinctrl-0 = <&uart5_global_pin>;
+			status = "disabled";
+		};
+		rst_ctrl: aon-sys-ctrl@1160b0 {
+			compatible = "zte,zx-sysctrl";
+			reg = <0x001160b0 0x4>;
+
+			wdt_rst_ctrl: wdt_rst_ctrl {
+				zx-sysctrl,bits = <0x0 0xfff>;
+			};
+
+		};
+		wdt_ares: watchdog@0x01465000 {
+			compatible = "zte,zx296718-wdt";
+			reg = <0x01465000 0x1000>;
+			intterupts = <GIC_SPI 107 4>;
+			clocks = <&topcrm WDT_WCLK>;
+			resets = <&toprst 35>;
+			reset-names = "wdtrst";
+			clock-names = "wdtclk";
+			zx-sysctrl-0 = <&wdt_rst_ctrl>;
+			reset-mask-config = <0x001 0x115>;
+		};
+
+		dma: dma-controller@01460000 {
+			compatible = "zte,zx-dma";
+			reg = <0x01460000 0x1000>;
+			interrupts = <GIC_SPI 26 4>;
+			clocks = <&osc24m>;
+			clock-names = "dmaclk";
+			#dma-cells = <1>;
+			dma-channels = <32>;
+			dma-requests = <32>;
+			status = "disabled";
+		};
+
+		aon_int_clr: aon-int-clr@00122000 {
+			compatible = "zte,aon-int-clr";
+			reg = <0x00122000 0x1000>;
+		};
+		aon_sysctrl: aon-sysctrl@116000 {
+			compatible = "zte,aon-sysctrl";
+			reg = <0x00116000 0x1000>;
+		};
+		aon_map: aon-map@11e000 {
+			compatible = "zte,aon-map";
+			reg = <0x0011e000 0x1000>;
+		};
+        efuse: efuse@0x11a000 {
+			compatible = "zte,efuse";
+			reg = <0x0011a000 0x1000>;
+			status = "ok";
+		};
+
+		rtc: rtc@a0006000 {
+			compatible = "zte,zx296718-rtc";
+			reg = <0x00115000 0x1000>;
+			interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>,
+						 <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "IRQ_RTC_TIMER", "IRQ_RTC_ALARM";
+			clocks = <&clk24k>;
+			clock-names = "rtcclk";
+			status = "disabled";
+		};
+		pcu_domain: pcu@0x00117000 {
+			compatible = "zte,zx296718-pcu";
+			reg = <0x00117000 0x1000>;
+			#power-domain-cells = <1>;
+			status = "disabled";
+		};
+		irdec: irdec@111000 {
+			compatible = "zte,zx296718-irdec";
+			reg = <0x111000 0x1000>;
+			interrupts = <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH>;
+			status = "disabled";
+		};
+        gmac: ethernet@1404000 {
+			compatible = "snps,dwmac";
+			reg = <0x1404000 0x2000>;
+			interrupts = <GIC_SPI 25 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "macirq";
+			clocks = <&topcrm GMAC_RMIICLK>, <&topcrm GMAC_PCLK>,<&topcrm GMAC_ACLK>,<&topcrm GMAC_RFCLK>;/*<&topcrm GMAC_WCLK> 1000M MODE*/
+			clock-names = "stmmaceth","pclk_mac","aclk_mac", "clk_mac_ref";
+			status = "disabled";
+			power-domains = <&pcu_domain DM_ZX296718_GMAC>;
+		};
+		usim0: usim@0x0142c000 {
+			compatible = "zte,zx296718-usim";
+			reg = <0x0142c000 0x1000>;
+			interrupts = <GIC_SPI 37 4>;
+			clocks = <&osc12m>;
+			clock-names = "usimclk";
+			status = "disabled";
+		};
+		usim1: usim@0x01438000 {
+			compatible = "zte,zx296718-usim";
+			reg = <0x01438000 0x1000>;
+			interrupts = <GIC_SPI 58 4>;
+			clocks = <&osc12m>;
+			clock-names = "usimclk";
+			status = "disabled";
+		};
+		sdio_ctrl: sdio-io-config@119058 {
+			compatible = "zte,zx-sysctrl";
+			reg = <0x00119058 0xc>;
+
+			DS0_io_config: DS0_io_config {
+				zx-sysctrl,bits = <0x0 0x1C0E070>;
+			};
+ 			DS1_io_config: DS1_io_config {
+				zx-sysctrl,bits = <0x4 0x1C0E070>;
+			};
+			v18_io_config: v18_io_config {
+				zx-sysctrl,bits = <0x8 0x4>;
+			};
+		};
+		mmc0: mmc@0x01470000{
+			compatible = "zxic,dw-mshc-6718";
+			reg = <0x01470000 0x1000>;
+			interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
+			bus-width = <8>;
+			fifo-depth = <128>;
+			clock-frequency = <167000000>;
+			clocks = <&topcrm EMMC_NAND_AHB>, <&topcrm EMMC_WCLK>;
+			clock-names = "biu", "ciu";
+			max-frequency = <167000000>;
+			cap-mmc-highspeed;
+			mmc-ddr-1_8v;
+			mmc-hs200-1_8v;
+			/*mmc-hs400-1_8v;*/
+			non-removable;
+			disable-wp;
+			retry-delay;
+			/*idmac-dto;*/
+			status = "disabled";
+		};
+		mmc1: mmc@0x01110000 {
+			compatible = "zxic,dw-mshc-6718";
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <0x01110000 0x1000>;
+			interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
+			fifo-depth = <512>;
+			bus-width = <4>;
+			clock-frequency = <50000000>;
+			clocks = <&topcrm SD0_AHB>,<&topcrm SD0_WCLK>;
+			clock-names = "biu", "ciu";
+			num-slots = <1>;
+			max-frequency = <50000000>;
+			cap-sdio-irq;
+			/*keep-power-in-suspend;*/
+			/*enable-sdio-wakeup;*/
+			supports-highspeed;
+			cap-sd-highspeed;
+			sd-uhs-sdr12;
+			sd-uhs-sdr25;
+			sd-uhs-sdr50;
+			sd-uhs-sdr104;
+			sd-uhs-ddr50;
+			non-removable;
+			disable-wp;
+			/*status = "disabled";*/
+			zx-sysctrl-names = "io_config_reg58","io_config_reg5c","io_config_reg60";
+			zx-sysctrl-0 = <&DS0_io_config>;
+			zx-sysctrl-1 = <&DS1_io_config>;
+			zx-sysctrl-2 = <&v18_io_config>;
+			DS0_config_val = <0x804020>;
+			DS1_config_val = <0x804020>;
+			v18_config_val = <0x4>;
+			sdio-wifi;
+		};
+
+		mmc2: mmc@0x01111000 {
+			compatible = "zxic,dw-mshc-6718";
+			#address-cells = <1>;
+			#size-cells = <0>;
+			reg = <0x01111000 0x1000>;
+			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
+			fifo-depth = <512>;
+			status = "disabled";
+		};
+		sysctrl: sysctrl@0x01463000 {
+			compatible = "zte,zx296718-sysctrl", "syscon";
+			reg = <0x01463000 0x40000>;
+		};
+		usb-phys {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			compatible = "simple-bus";
+
+			usb2_phy: usb-phy@3 {
+ 				compatible = "zte,zx296718-usb-phy";
+				reg = <1>;
+				clocks = <&topcrm USB30_PHY_S_CLK>;
+				clock-names = "phyclk";
+			};
+			usb3_phy: usb-phy@4 {
+				compatible = "zte,zx296718-usb-phy";
+				reg = <1>;
+				clocks = <&topcrm USB30_PHY_S_CLK>;
+				clock-names = "phyclk";
+			};
+		};
+		usbphy0:usb-phy0{
+			compatible = "zxic,usb2-phy";
+			#phy-cells = <0>;
+			clocks = <&topcrm USB20_PHY_CLK>;
+			clock-names = "phyclk";
+			status = "okay";
+		};
+		usbphy1:usb-phy1{
+ 			compatible = "zxic,usb2-phy";
+			#phy-cells = <0>;
+			clocks = <&topcrm USB21_PHY_CLK>;
+			clock-names = "phyclk";
+			status = "okay";
+		};
+		usb0: usb@0x01200000 {
+			compatible = "zxic,dwc2";
+			reg = <0x01200000 0x40000>;
+			interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&topcrm USB20_HCLK>;
+			clock-names = "otg";
+			phys = <&usbphy0>;
+			phy-names = "usb2-phy";
+			status = "disabled";
+			power-domains = <&pcu_domain DM_ZX296718_USB20>;
+
+		};
+		usb1: usb@0x01240000 {
+			compatible = "zxic,dwc2";
+			reg = <0x01240000 0x40000>;
+			interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+			clocks = <&topcrm USB21_HCLK>;
+			clock-names = "otg";
+			phys = <&usbphy1>;
+			phy-names = "usb2-phy";
+			status = "disabled";
+			power-domains = <&pcu_domain DM_ZX296718_USB21>;
+		};
+		 usb2: usb@0x01300000 {
+ 			compatible = "zte,zx296718-dwc3";
+			clocks = <&topcrm USB30_AXI_CLK>,<&topcrm USB30_REF_CLK>,<&topcrm USB30_PHY_S_CLK>,<&topcrm USB30_SUS_CLK>;
+ 			clock-names = "usb3axi","usb3ref","usb3phy","usb3sus";
+			#address-cells = <1>;
+			#size-cells = <1>;
+			status = "disabled";
+			ranges;
+ 			dwc3@0x01300000 {
+ 				compatible = "snps,dwc3";
+ 				reg = <0x01300000 0x100000>;
+				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
+				phys = <&usb2_phy>, <&usb3_phy>;
+				phy-names = "usb2-phy", "usb3-phy";
+ 				dr_mode = "peripheral";
+				tx-fifo-resize;
+				power-domains = <&pcu_domain DM_ZX296718_USB30>;	
+			};
+		};
+		
+		isp: isp@0x01408000 {
+			compatible = "zte,zx296718-isp";
+			reg = <0x01408000 0x3000>;
+			interrupts = <GIC_SPI 93 4>,<GIC_SPI 94 4>,<GIC_SPI 95 4>,<GIC_SPI 96 4>,<GIC_SPI 97 4>;
+			interrupt-names = "IRQ_ISP_MIPI", "IRQ_ISP_MI","IRQ_ISP_ISP","IRQ_ISP_JPEG_ERR","IRQ_ISP_JPEG_STAT";
+			clocks = <&topcrm ISP_SENSOR_CLK>;
+			clock-names = "sensor_ref_clk";
+			resets = <&lbviulocalswrst 7>;
+			reset-names = "isp_rst";
+			status = "disabled";
+			power-domains = <&pcu_domain DM_ZX296718_VIU>;
+			ports {
+				#address-cells = <1>;
+				#size-cells = <0>;
+				port@1 {
+					reg = <1>;
+					csi: endpoint {
+						remote-endpoint = <&mipi_1_1>;
+						clock-lanes = <2>;
+						data-lanes = <1 3>;
+						crc = <1>;
+						lane-polarities = <1 1 1>;
+					};
+				};
+			};
+		};
+		
+		vou: vou@0x01440000 {
+			compatible = "zte,zx296718-vou";
+			reg = <0x01440000 0x20000>;
+			interrupts = <GIC_SPI 81 4>;
+			clocks = <&topcrm VOU_ACLK>, <&topcrm VOU_MAIN_WCLK>, <&topcrm VOU_AUX_WCLK>, <&topcrm VOU_PPU_WCLK>;
+			clock-names = "vou_aclk", "vou_main_wclk", "vou_aux_wclk", "vou_ppu_wclk";
+			resets = <&toprst 26>;
+			reset-names = "vou_rst";
+		    memory-region = <&multimedia_region>;
+			status = "ok";
+			power-domains = <&pcu_domain DM_ZX296718_VOU>;
+		};
+
+		tvenc: tvenc@0x01442000 {
+			compatible = "zte,zx296718-tvenc";
+			reg = <0x01442000 0x1000>;
+			status = "ok";
+			/*power-domains = <&pcu_domain DM_ZX296718_VOU>;*/
+		};
+
+
+		lvds: lvds@0x01446000 {
+			compatible = "zte,zx296718-lvds";
+			pinctrl-names = "lvds_global_out";
+			pinctrl-0 = <&lvds_global_pin>;
+			status = "disabled";
+		};
+		
+		demux: demux@0x01400000 {
+			compatible = "zte,zx296718-demux";
+			reg = <0x01400000 0x4000>;
+			interrupts = <GIC_SPI 20 4>;
+			status = "ok";
+		};
+		
+		rgblcd: rgblcd@0x01447000 {
+			compatible = "zte,zx296718-rgblcd";
+			reg = <0x01447000 0x2c>;
+			interrupts = <GIC_SPI 85 4>;
+		    /*clocks = <&topcrm rgb_lcd>;
+		    clock-names = "rgb_lcd";				
+			power-domains = <&pcu_domain DM_ZX296718_VOU>;*/
+			status = "disabled";
+		};
+		
+		vga: vga@0x01448000 {
+			compatible = "zte,zx296718-vga";
+			reg = <0x01448000 0x1000>;
+			interrupts = <GIC_SPI 86 4>;
+			status = "disabled";
+		};
+
+		hdmi: hdmi@0x144c000 {
+			compatible = "zte,zx296718-hdmi";
+			reg = <0x144c000 0x4000>;
+			interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
+		        clocks = <&topcrm HDMI_OSC_CEC>, <&topcrm HDMI_OSC_CLK>, <&topcrm HDMI_XCLK>;
+		        clock-names = "hdmi_osc_cec", "hdmi_osc_clk", "hdmi_xclk";			
+			
+			status = "ok";
+			/*power-domains = <&pcu_domain DM_ZX296718_VOU>;*/
+		};
+		
+		hdmicec: hdmicec@0x144c000 {
+			compatible = "zte,zx296718-hdmicec";			
+			status = "ok";
+			/*power-domains = <&pcu_domain DM_ZX296718_VOU>;*/
+		};
+
+		gpu: gpu@0x01410000 {
+			compatible = "arm,malit602", "arm,malit60x", "arm,malit6xx", "arm,mali-midgard";
+			reg = <0x01410000 0x4000>;
+			interrupts = <0 77 4>, <0 76 4>, <0 78 4>;
+			interrupt-names = "JOB", "MMU", "GPU";
+			
+			clocks = <&topcrm GPU_ACLK>;
+			clock-names = "clk_mali";
+			/*mali-supply = <&vdd_mali>;
+			power-domains = <&power_mali>;*/
+			operating-points = <
+				/* KHz   uV */
+				648000 1250000
+				600000 1150000
+				594000 1125000
+				500000 1075000
+				394000 1025000
+				334000  925000
+				297000  912500
+			>;
+			cooling-min-state = <0>;
+			cooling-max-state = <6>;
+			#cooling-cells = <2>;
+			status = "ok";
+                        /*power_model {
+		                compatible = "arm,mali-simple-power-model";
+		                voltage = <800>;
+		                frequency = <500>;
+		                static-power = <500>;
+		                dynamic-power = <1500>;
+		                ts = <20000 2000 (-20) 2>;
+		                thermal-zone = "gpu_thermal";
+	                };*/			
+		};
+	
+		tempsensor: tempsensor@148a000 {
+			compatible = "zte,zx-thermal";
+			reg = <0x0148a000 0x20>;
+			clocks = <&topcrm TEMPSENSOR_GATE>,<&audiocrm AUDIO_TS_PCLK>;
+			clock-names = "tempsensor_gate","tempsensor_pclk";
+			#thermal-sensor-cells = <0>;
+		};
+
+		zx_cooling_dev: zx_cooling_dev {
+			cluster0_cooling_dev: cluster0-cooling-dev {
+				#cooling-cells = <2>;
+				cpumask = <0xf>;
+				capacitance = <1500>;
+			};
+
+			cluster1_cooling_dev: cluster1-cooling-dev {
+				#cooling-cells = <2>;
+				cpumask = <0x30>;
+				capacitance = <2000>;
+			};
+		};
+
+		thermal-zones {
+			#include "zx296718-thermal.dtsi"
+		};
+
+		g1v6@0140c000 {
+			compatible ="zte,zx296718-hx170dec";
+			reg = <0x01472000 0x1000>;
+			interrupts = <GIC_SPI 90 4>;
+			clocks = <&topcrm VDE_ACLK>;
+			clock-names = "g1v6_aclk";
+			resets = <&toprst 20>;
+			reset-names = "vde_rst";
+			status = "ok";
+			power-domains = <&pcu_domain DM_ZX296718_VDE>;
+		};
+
+		g2v2@0140c000 {
+			compatible ="zte,zx296718-hde";
+			reg = <0x01471000 0x1000>;
+			interrupts = <GIC_SPI 91 4>;
+			clocks = <&topcrm HDE_ACLK>;
+			clock-names = "g2v2_aclk";
+			resets = <&toprst 22>, <&aresrst 6>;
+			reset-names = "hde_rst", "ares_rst";
+			status = "ok";
+			power-domains = <&pcu_domain DM_ZX296718_HDE>;
+		};
+
+		h1v6@0140c000 {
+			compatible ="zte,zx296718-hx280enc";
+			reg = <0x01467000 0x1000>;
+			interrupts = <GIC_SPI 89 4>;
+			clocks = <&topcrm VCE_ACLK>;
+			clock-names = "h1v6_aclk";
+			resets = <&toprst 21>;
+			reset-names = "vce_rst";
+			status = "ok";
+			power-domains = <&pcu_domain DM_ZX296718_VCE>;
+		};
+
+		sappu@0x01473000 {
+			compatible ="zte,zx296718-sappu";
+			reg = <0x01473000 0x1000>;
+			interrupts = <GIC_SPI 98 4>;
+			clocks = <&topcrm SAPPU_ACLK>, <&topcrm SAPPU_WCLK>;
+			clock-names = "sappu_aclk", "sappu_wclk";
+			resets = <&toprst 24>;
+			reset-names = "sappu_rst";
+			status = "ok";
+			power-domains = <&pcu_domain DM_ZX296718_SAPPU>;
+		};  
+        
+		spdif0: spdif@01488000 {
+			compatible = "zte,zx-spdif";
+			reg = <0x1488000 0x1000>;
+			clocks = <&audiocrm AUDIO_SPDIF0_WCLK>, <&audiocrm AUDIO_SPDIF0_PCLK>;
+			clock-names = "spdif_wclk", "spdif_pclk";
+			interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
+			dmas = <&dma 30>;
+			dma-names = "tx";
+			status = "disabled";
+		};
+
+		spdif1: spdif@01489000 {
+			compatible = "zte,zx-spdif";
+			reg = <0x01489000 0x1000>;
+			clocks = <&audiocrm AUDIO_SPDIF1_WCLK>, <&audiocrm AUDIO_SPDIF1_PCLK>;
+			clock-names = "spdif_wclk", "spdif_pclk";
+			interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
+			dmas = <&dma 31>;
+			dma-names = "tx";
+			pinctrl-names = "global_out", "aon_pin";
+			pinctrl-0 = <&spdif1_global_pin>;
+			pinctrl-1 = <&spdif1_aon>;
+			status = "disabled";
+		};
+		i2s0: i2s@01482000 {
+			compatible = "zte,zx-i2s";
+			reg = <0x01482000 0x1000>;
+            clocks = <&audiocrm AUDIO_I2S0_WCLK>, <&audiocrm AUDIO_I2S0_PCLK>;			
+			clock-names = "i2s_wclk", "i2s_pclk";
+			interrupts = <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>;
+			dmas = <&dma 22>, <&dma 23>;
+			dma-names = "tx", "rx";
+			status = "disabled";
+		};
+
+		i2s1: i2s@01483000 {
+			compatible = "zte,zx-i2s";
+			reg = <0x01483000 0x1000>;
+			clocks = <&audiocrm AUDIO_I2S1_WCLK>, <&audiocrm AUDIO_I2S1_PCLK>;	
+			clock-names = "i2s_wclk", "i2s_pclk";
+			interrupts = <GIC_SPI 61 IRQ_TYPE_LEVEL_HIGH>;
+			dmas = <&dma 18>, <&dma 19>;
+			dma-names = "tx", "rx";
+            		pinctrl-names = "global_pin";
+			pinctrl-0 = <&i2s1_global_pin>;
+			status = "disabled";
+		};
+
+		i2s2: i2s@01484000 {
+			compatible = "zte,zx-i2s";
+			reg = <0x01484000 0x1000>;
+			clocks = <&audiocrm AUDIO_I2S2_WCLK>, <&audiocrm AUDIO_I2S2_PCLK>;	
+			clock-names = "i2s_wclk", "i2s_pclk";
+			interrupts = <GIC_SPI 62 IRQ_TYPE_LEVEL_HIGH>;
+			dmas = <&dma 26>, <&dma 27>;
+			dma-names = "tx", "rx";
+            		pinctrl-names = "global_pin";
+			pinctrl-0 = <&i2s2_global_pin>;
+			status = "disabled";
+		};
+
+		i2s3: i2s@01485000 {
+			compatible = "zte,zx-i2s";
+			reg = <0x01485000 0x1000>;
+			clocks = <&audiocrm AUDIO_I2S3_WCLK>, <&audiocrm AUDIO_I2S3_PCLK>;	
+			clock-names = "i2s_wclk", "i2s_pclk";
+			interrupts = <GIC_SPI 63 IRQ_TYPE_LEVEL_HIGH>;
+			dmas = <&dma 28>, <&dma 29>;
+			dma-names = "tx", "rx";
+			status = "disabled";
+		};
+
+
+		snd_i2s0: i2s0  {
+			compatible = "simple-audio-card";
+			simple-audio-card,name = "zx_snd_i2s0";
+			simple-audio-card,format = "i2s";
+			simple-audio-card,bitclock-master = <&snd_i2s0_codec>;
+			simple-audio-card,frame-master = <&snd_i2s0_codec>;
+			snd_i2s0_cpu:simple-audio-card,cpu {
+				sound-dai = <&i2s0>;
+			};
+
+			snd_i2s0_codec:simple-audio-card,codec {
+				sound-dai = <&inner_codec>;
+			};
+		};
+
+		snd_i2s1: i2s1  {
+			compatible = "simple-audio-card";
+			simple-audio-card,name = "zx_snd_i2s1";
+			simple-audio-card,format = "i2s";
+			simple-audio-card,bitclock-master = <&snd_i2s1_codec>;
+			simple-audio-card,frame-master = <&snd_i2s1_codec>;
+			snd_i2s1_cpu:simple-audio-card,cpu {
+				sound-dai = <&i2s1>;
+			};
+
+			snd_i2s1_codec:simple-audio-card,codec {
+				sound-dai = <&pcm3168>;
+			};
+		};
+
+		snd_i2s2: i2s2 {
+			compatible = "simple-audio-card";
+			simple-audio-card,name = "zx_snd_i2s2";
+			simple-audio-card,format = "i2s";
+			simple-audio-card,bitclock-master = <&snd_i2s2_codec>;
+			simple-audio-card,frame-master = <&snd_i2s2_codec>;
+			snd_i2s2_cpu:simple-audio-card,cpu {
+				sound-dai = <&i2s2>;
+			};
+
+			snd_i2s2_codec:simple-audio-card,codec {
+				sound-dai = <&pcm3168>;
+			};
+		};
+
+		snd_i2s3: i2s3 {
+			compatible = "simple-audio-card";
+			simple-audio-card,name = "zx_snd_i2s3";
+			simple-audio-card,format = "i2s";
+			simple-audio-card,bitclock-master = <&snd_i2s3_codec>;
+			simple-audio-card,frame-master = <&snd_i2s3_codec>;
+			snd_i2s3_cpu:simple-audio-card,cpu {
+				sound-dai = <&i2s3>;
+			};
+
+			snd_i2s3_codec:simple-audio-card,codec {
+				sound-dai = <&acodec0>;
+			};
+		};
+		
+		sound0 {
+			compatible = "simple-audio-card";
+			simple-audio-card,name = "zx_snd_spdif0";
+			simple-audio-card,cpu {
+			    sound-dai = <&spdif0>;
+			};
+			simple-audio-card,codec {
+			    sound-dai = <&ncodec0>;
+			};
+		};
+
+
+		sound1 {
+			compatible = "simple-audio-card";
+			simple-audio-card,name = "zx_snd_spdif1";
+			simple-audio-card,cpu {
+			    sound-dai = <&spdif1>;
+			};
+			 simple-audio-card,codec {
+			    sound-dai = <&ncodec1>;
+			};
+		};
+		
+		acodec0: acodec0 {
+			#sound-dai-cells = <0>;
+			compatible = "linux,hdmi-audio";
+		};
+
+
+		pcm3168: pcm3168 {
+			#sound-dai-cells = <0>;
+			compatible = "zte,zx296718-pcm3168";
+		};
+
+    	
+
+		cpufreq: cpufreq {
+			compatible = "zte,zx296718-cpufreq";
+			reg = <0x01439000 0x1000>;
+			clocks = <&topcrm A53_GATE>, <&topcrm A72_GATE>, <&lsp1crm LSP1_PWM_PCLK>, <&lsp1crm LSP1_PWM_WCLK>;
+			clock-names = "a53_wclk", "a72_wclk", "lsp1_pwm_pclk", "lsp1_pwm_wclk";
+			pinctrl-names = "top_keycol2_pin_sel_pwm_out1", "aon_keycol2_out_top", "evb_board_top_pwm_out2_to_pad", "aon_keyrow1_out_top", "evb_board_top_pwm_out3_to_pad", "aon_keyrow2_out_top", "evb_board_top_i2c5_scl_pin_sel_pwm_out2", "evb_board_top_i2c5_sda_pin_sel_pwm_out3";
+			pinctrl-0 = <&top_keycol2_pin_sel_pwm_out1>;
+			pinctrl-1 = <&aon_keycol2_out_top>;
+			pinctrl-2 = <&top_keyrow1_pin_sel_pwm_out2>;
+			pinctrl-3 = <&aon_keyrow1_out_top>;
+			pinctrl-4 = <&top_keyrow2_pin_sel_pwm_out3>;
+			pinctrl-5 = <&aon_keyrow2_out_top>;
+			pinctrl-6 = <&top_i2c5_scl_pin_sel_pwm_out2>;
+			pinctrl-7 = <&top_i2c5_sda_pin_sel_pwm_out3>;
+		};
+
+		ncodec0: ncodec0 {
+			#sound-dai-cells = <0>;
+			compatible = "linux,hdmi-audio";
+		};
+
+		ncodec1: ncodec1 {
+			#sound-dai-cells = <0>;
+			compatible = "linux,spdif-dit";
+		};
+        	audio_i2c0: audio_i2c0@01486000 {
+                    compatible = "zte,zx-i2c";
+                    reg = <0x01486000 0x1000>;
+                    interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
+                    #address-cells = <1>;
+                    #size-cells = <0>;
+                    clocks = <&audiocrm AUDIO_I2C0_WCLK>;
+                  	//clock-names = "tx";                    
+                    status = "disabled";                    
+                    inner_codec: aud96p22@22 {
+                        #sound-dai-cells = <0>;
+                        compatible = "zte,zx296718-aud96p22";
+                        reg = <0x22>;   
+                        gpios = <&bgpio4 64 GPIO_ACTIVE_LOW>;
+                    };
+                };
+	i2c0: i2c0@00112000 {
+    	compatible = "zte,zx-i2c";
+    	reg = <0x00112000 0x1000>;
+    	interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
+    	#address-cells = <1>;
+    	#size-cells = <0>;
+    	clocks = <&osc24m>;
+   	/* clock-names = "i2c0_wclk";  */
+        /*pinctrl-names = "global_pin";  */
+		/* pinctrl-0 = <&i2c3_global_pin>;*/
+
+  		status = "disabled";
+	    mipi_1: camera@10 {
+			compatible = "zte,mipi";
+			reg = <0x10>;
+			/* No reset gpio */
+	/*		vana-supply = <&vaux3>;*/
+			clocks = <&isp 0>;
+			clock-frequency = <9600000>;
+			zte,nvm-size = <(16 * 64)>;
+			port {
+				mipi_1_1: endpoint {
+					link-frequencies = /bits/ 64 <199200000 210000000 499200000>;
+					clock-lanes = <0>;
+					data-lanes = <1 2>;
+					remote-endpoint = <&csi>;
+				};
+			};
+		};
+    	imx091_moto: moto@0c {
+    	compatible = "zte,imx091-moto";
+    	reg = <0x0c>;   
+		};
+	};
+		
+		i2c3: i2c3@0142e000 {
+            	compatible = "zte,zx-i2c";
+            	reg = <0x0142e000 0x1000>;
+            	interrupts = <GIC_SPI 57 IRQ_TYPE_LEVEL_HIGH>;
+            	#address-cells = <1>;
+            	#size-cells = <0>;
+            	clocks = <&lsp0crm LSP0_I2C3_WCLK>;
+           	/* clock-names = "i2c3_wclk";  */
+                pinctrl-names = "global_pin";
+		pinctrl-0 = <&i2c3_global_pin>;
+            	status = "disabled";
+        	};
+
+	i2c4: i2c4@0 { 
+		compatible = "i2c-gpio";
+		gpios = <&bgpio5 5 0 /* sda : BGPIO85 */
+				 &bgpio5 4 0 /* scl : BGPIO84  */ >; 
+		/*i2c-gpio,sda-open-drain;*/
+		/*i2c-gpio,scl-open-drain;*/
+		i2c-gpio,delay-us = <5>;	/* ~100 kHz */
+		#address-cells = <1>;
+		#size-cells = <0>;
+		}; 
+
+		
+        logo: logo{
+            compatible = "zte,zx296718-logo";
+		    memory-region = <&multimedia_region>;
+            status = "ok";
+        };
+	zx_led: zx_led {
+		compatible = "zte,zx-led";
+		status = "disabled";
+		powerred-gpio = <&agpio0 8 0>;          /*agpio8*/
+        /*powergreen-gpio = <&agpio0 8 0>;*/        /*agpio8*/
+        /*only-power;*/
+        /*netgreen-gpio = <&bgpio2 4 0>;*/			/*bgpio36*/
+        /*ir-gpio = <&agpio1 7 0>;*/          		/*agpio23*/
+        /*netred-gpio = <&bgpio2 5 0>;*/			/*bgpio37*/
+	};
+
+		gpio_keys: gpio_keys {
+			status = "disabled";
+			compatible = "gpio-keys-zx";
+			#address-cells = <1>;
+			#size-cells = <0>;
+		};	
+       bdctrl: bdctrl {
+			compatible = "zte,zx-bdctrl";
+		};		
+	};
+};
+
+#include "zx296718-pinctrl.dtsi"

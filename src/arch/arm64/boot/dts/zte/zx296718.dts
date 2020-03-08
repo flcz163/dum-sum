@@ -1,0 +1,165 @@
+/*
+ * ZTE Ltd. zx296718 Plaform
+ *
+ */
+/dts-v1/;
+#include "zx296718.dtsi"
+
+/ {
+	model = "ZTE zx296718 evaluation board";
+	compatible = "zte,zx296718-evb", "zte,zx296718";
+
+
+	chosen {
+		bootargs = "console=ttyS0,115200 earlyprintk";
+	};
+
+	memory@40000000 {
+		device_type = "memory";
+		reg = <0x40000000 0x40000000>;
+	};
+
+	/*memory@c0000000 {
+		device_type = "memory";
+		reg = <0xc0000000 0x10000000>;
+	};*/
+};
+
+&dma {
+	status = "ok";
+};
+&usb0{
+	status = "okay";
+};
+&usb1{
+	status = "okay";
+};
+&bgpio4{
+	status = "okay";
+};
+/*&usb2{
+	status = "okay";
+};*/
+&mmc0{
+	status = "okay";
+};
+&mmc1{
+	status = "okay";
+};
+&mmc2{
+	bus-width = <4>;
+	clock-frequency = <50000000>;
+	clocks = <&topcrm SD1_AHB>,<&topcrm SD1_WCLK>;
+	clock-names = "biu", "ciu";
+	num-slots = <1>;
+	max-frequency = <50000000>;
+	cap-sdio-irq;
+	enable-sdio-wakeup;
+	supports-highspeed;
+	cap-sd-highspeed;
+	card-detect-delay = <500>;
+	/*sd-uhs-sdr12;*/
+	/*sd-uhs-sdr25;*/
+	/*sd-uhs-sdr50;*/
+	/*sd-uhs-sdr104;*/
+	/*sd-uhs-ddr50;*/
+	/*non-removable;*/
+	disable-wp;
+	status = "okay";
+};
+&gmac {
+	status = "ok";
+};
+
+&irdec {
+	status = "ok";
+};
+&pcu_domain {
+	status = "ok";
+};
+
+&cpufreq {
+	status = "okay";
+};
+
+&spdif0{
+	#sound-dai-cells = <0>;
+	status = "okay";
+};
+
+&spdif1 {
+	#sound-dai-cells = <0>;
+	status = "okay";
+};
+
+
+
+&audio_i2c0 {	
+    	status = "okay";       
+};
+&i2s0 {
+	#sound-dai-cells = <0>;
+	status = "okay";
+};
+
+&i2c3 {	
+    	status = "disabled";
+        pcm3168_i2c: pcm3168@44 {
+        compatible = "zte,zx296718-i2c-pcm3168";
+        reg = <0x44>;  
+	};
+};
+
+
+&i2s1 {
+	#sound-dai-cells = <0>;
+	status = "disabled";
+};
+
+&i2s2 {
+	#sound-dai-cells = <0>;
+	status = "disabled";
+};
+
+&i2s3 {
+	#sound-dai-cells = <0>;
+	status = "disabled";
+};
+&zx_led {
+        powerred-gpio = <&agpio1 9 0>;          /*agpio25*/
+        powergreen-gpio = <&agpio0 8 0>;        /*agpio8*/
+        only-power;
+};
+&bgpio0 {
+	status = "okay";
+};
+&bgpio1 {
+	status = "okay";
+};
+&bgpio2 {
+	status = "okay";
+};
+&bgpio3 {
+	status = "okay";
+};
+&bgpio4 {
+	status = "okay";
+};
+&bgpio5 {
+	status = "okay";
+};
+&bgpio6 {
+	status = "okay";
+};
+&agpio0 {
+	status = "okay";
+};
+&agpio1 {
+	status = "okay";
+};
+&bdctrl {    
+	gpios = <&bgpio3 10 0 &bgpio4 1 0 &bgpio2 3 0 &bgpio3 4 0 &agpio1 15 0>;/*BGPIO58       BGPIO65      BGPIO35    BGPIO52       AONGPIO31*/
+	mute-gpio = <&bgpio4 0 0>; /*bgpio64*/
+	hc-switch-gpio = <&bgpio4 2 0>; /*hdmi cvbs switch ,bgpio66*/
+	/*no-hc-switch;*/
+};

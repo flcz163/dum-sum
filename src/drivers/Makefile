@@ -1,0 +1,11 @@
+obj-y   = virtio/
+obj-y	+= base/
+obj-y                           += irqchip/
+#obj-y				+= char/
+obj-y	+= block/
+#obj-y				+= mmc/
+#obj-y	+= mtd/
+obj-y	+= clocksource/
+obj-y	+= tty/
+obj-y	+= amba/
+obj-y	+= net/
