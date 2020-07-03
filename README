@@ -1,0 +1,13 @@
+1、快速上手
+  第一步：下载代码
+     git clone https://gitee.com/xiebaoyou/dim-sum.git
+
+  第二步：进入源码目录
+     cd src
+
+  第三步：编译代码
+    sh build.sh
+
+  第四步：运行
+    sh run.sh
+		
