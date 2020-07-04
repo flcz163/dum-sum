@@ -38,4 +38,30 @@
 
   第八步：将git地址告诉xiebaoyou，微信号：linux-kernel，或者mail-to：scxby@163.com
 
+3、如何制作文件系统
+
+  第一步：制作一个空的dim-sum.img文件
+
+  第二步：使用losetup将dim-sum.img加载到/dev/loop设备
+
+  第三步：使用fdisk命令对/dev/loop设备进行分区
+
+    需要分两个区，一个作为dim-sum文件系统数据盘，一个作为日志盘。
+
+    可以看看当前dim-sum.img的设置。
+
+  第四步：使用如下类似命令启动一个Linux：
+    sudo -S qemu-system-aarch64 -M virt -cpu cortex-a53 -smp 4 -m 4096 -kernel arch/arm64/boot/Image -drive file=./dim-sum.img,if=none,id=blk0 -device virtio-blk-device,drive=blk0 -drive file=./rootfs.img,if=none,id=blk1 -device virtio-blk-device,drive=blk1 -device virtio-net-device,netdev=network0,mac=52:54:00:4a:1e:d4 -netdev tap,id=network0,ifname=tap0 --append "earlyprintk console=ttyAMA0 root=/dev/vda rootfstype=ext3 init=/bin/sh rw ip=10.0.0.10::10.0.0.1:255.255.255.0:::off"
+
+  其中rootfs.img是一般的Linux镜象，需要包含mkfs.ext3命令。
+
+  第五步：在虚拟机的Linux中运行如下命令：
+
+    /e2fsprogs-1.42.8/sbin/mkfs.ext3 /dev/vdb1 -J device=/dev/vdb2
+
+  其中我的mkfs.ext3命令由手工编译e2fsprogs包生成的。
+
+  第六步：mount /dev/vdb1，并向其中复制文件
+
+  第七步：关闭Linux后，dim-sum.img中就有相应的文件，并可以被dim-sum识别了。 
 
