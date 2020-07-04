@@ -11,4 +11,31 @@
 
   第四步：运行
     sh run.sh
-		
+
+2、非gitee.com开发者如何提交pull request？
+ 
+  对于github开发者来说，可以在github中创建一个空的git库
+
+  第一步：clone git到本地。
+
+  第二步：添加dim-sum到本地：
+    git remote add gitee.com https://gitee.com/xiebaoyou/dim-sum.git
+
+  第三步：拉取gitee.com上的dim-sum源码
+    git fetch gitee.com
+
+  第四步：创建for-baoyou分支
+    git branch -b for-baoyou
+
+  
+  第五步：合并gitee.com的代码到for-baoyou分支
+    git rebase gitee.com master
+
+  第六步：balabala写代码
+
+  第七步：push代码到github
+    git push gitee.com HEAD:for-baoyou
+
+  第八步：将git地址告诉xiebaoyou，微信号：linux-kernel，或者mail-to：scxby@163.com
+
+
