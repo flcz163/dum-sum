@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function main()
+main()
 {
 	cd `dirname $0`/../toolchains
 
