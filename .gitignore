@@ -56,3 +56,10 @@ src/.config.old
 src/.version
 toolchains/gcc-*
 src/include/generated/*.h
+src/.tmp_*
+src/arch/*/boot/Image
+src/arch/*/kernel/asm-offsets.s
+src/arch/*/kernel/vmlinux.lds
+src/kernel/bounds.s
+src/scripts/mod/devicetable-offsets.s
+src/vmlinux
