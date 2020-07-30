@@ -16,11 +16,14 @@ struct approximate_counter {
 #define FBC_BATCH	(MAX_CPUS*4)
 #endif
 
-static inline void approximate_counter_init(struct approximate_counter *fbc)
+static inline int approximate_counter_init(struct approximate_counter *fbc)
 {
 	smp_lock_init(&fbc->lock);
 	fbc->count = 0;
 	fbc->counters = alloc_percpu(long);
+	if (!fbc->counters)
+		return -ENOMEM;
+	return 0;
 }
 
 static inline void approximate_counter_destroy(struct approximate_counter *fbc)
