@@ -18,7 +18,7 @@ run:
 	cd src; sudo -S qemu-system-aarch64 -machine virt -cpu cortex-a53 -smp 4 -m 1024 -serial stdio -kernel arch/arm64/boot/Image -drive file=./dim-sum.img,if=none,id=blk -device virtio-blk-device,drive=blk -device virtio-net-device,netdev=network0,mac=52:54:00:4a:1e:d4 -netdev tap,id=network0,ifname=tap0 --append "earlyprintk console=ttyAMA0 root=/dev/vda rootfstype=ext3 init=/bin/ash rw ip=10.0.0.10::10.0.0.1:255.255.255.0:::off"
 
 clean:
-	cd src; make clean
+	cd src; make ARCH=arm64 clean
 
 distclean:
-	cd src; make distclean
+	cd src; make ARCH=arm64 distclean
