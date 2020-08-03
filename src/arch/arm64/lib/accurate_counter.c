@@ -26,7 +26,7 @@ long arch_accurate_sub(long i, struct accurate_counter *v)
 	unsigned long tmp;
 	long result;
 
-	asm volatile("// arch_accurate_add\n"
+	asm volatile("// arch_accurate_sub\n"
 		"1:	ldxr	%0, %2\n"
 		"	sub	%0, %0, %3\n"
 		"	stlxr	%w1, %0, %2\n"
