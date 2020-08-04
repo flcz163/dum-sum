@@ -523,6 +523,9 @@ config ARM64_VA_BITS
 	default 42 if ARM64_VA_BITS_42
 	default 48 if ARM64_VA_BITS_48
 
+config ARM64_PSCI_SMC
+	bool "y" 
+
 config CPU_BIG_ENDIAN
        bool "Build big-endian kernel"
        help

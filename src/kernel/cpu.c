@@ -84,7 +84,11 @@ struct salve_cpu_data salve_cpu_data;
 
 typedef unsigned long (psci_fn)(unsigned long, unsigned long,
 				unsigned long, unsigned long);
+#ifndef CONFIG_ARM64_PSCI_SMC 
 asmlinkage psci_fn __invoke_psci_fn_hvc;
+#else
+asmlinkage psci_fn __invoke_psci_fn_smc;
+#endif
 
 #define PSCI_RET_SUCCESS			0
 #define PSCI_RET_NOT_SUPPORTED			-1
@@ -122,7 +126,11 @@ static int psci_cpu_on(unsigned long cpuid, unsigned long entry_point)
 	u32 fn;
 
 	fn = 0xc4000003;
+#ifndef CONFIG_ARM64_PSCI_SMC
 	err = __invoke_psci_fn_hvc(fn, cpuid, entry_point, 0);
+#else
+        err = __invoke_psci_fn_smc(fn, cpuid, entry_point, 0);
+#endif 
 	return psci_to_linux_errno(err);
 }
 
