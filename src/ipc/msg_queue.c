@@ -332,7 +332,7 @@ RETRY:
 
 		msgq->msg_count--;
 
-		if (!list_is_empty(&msgq->wait_send_list))
+		if (!list_is_empty(&msgq->wait_send_list) && !list_is_empty(&msgq->msg_list))
 		{
 			struct msg_queue_send_item *wait;
 			struct task_desc *tsk;
