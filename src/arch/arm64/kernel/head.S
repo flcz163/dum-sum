@@ -354,13 +354,13 @@ ENTRY(slave_cpu_entry)
 	adrp	x13, global_pg_dir
 	bl	__prepare_cpu_mmu
 
-	ldr	x9, = salve_cpu_data
+	ldr	x9, = slave_cpu_data
 	ldr	x14, = __prepare_jump_to_slave
 	b	__turn_on_cpu_mmu
 ENDPROC(slave_cpu_entry)
 
 ENTRY(__prepare_jump_to_slave)
-	ldr	x0, [x9]			/* salve_cpu_data.stack */
+	ldr	x0, [x9]			/* slave_cpu_data.stack */
 	mov	sp, x0
 	mov x0, x9
 	mov	x29, #0

@@ -8,7 +8,7 @@ struct notifier_data;
 /**
  * 主核在启动从核时，传递给从核的参数
  */
-struct salve_cpu_data {
+struct slave_cpu_data {
 	/**
 	 * 从CPU堆栈，必须是第一个字段
 	 */
@@ -52,6 +52,6 @@ int cpu_offline(unsigned int cpu);
  * 初始化主核及从核的C入口函数
  */
 asmlinkage void __init start_master(void);
-asmlinkage void start_slave(struct salve_cpu_data *);
+asmlinkage void start_slave(struct slave_cpu_data *);
 
 #endif /* _DIM_SUM_CPU_H */

@@ -80,7 +80,7 @@ void init_cpu_online(const struct cpumask *src)
 }
 
 
-struct salve_cpu_data salve_cpu_data;
+struct slave_cpu_data slave_cpu_data;
 
 typedef unsigned long (psci_fn)(unsigned long, unsigned long,
 				unsigned long, unsigned long);
@@ -155,9 +155,9 @@ void arch_raise_ipi(const struct cpumask *mask, enum ipi_cmd_type cmd_type)
 	__smp_raise_ipi(mask, cmd_type);
 }
 
-asmlinkage void start_slave(struct salve_cpu_data *salve_cpu_data)
+asmlinkage void start_slave(struct slave_cpu_data *slave_cpu_data)
 {
-	int cpu = salve_cpu_data->cpu;
+	int cpu = slave_cpu_data->cpu;
 	smp_processor_id() = cpu;
 
 	set_this_cpu_offset(per_cpu_offset(smp_processor_id()));
@@ -190,9 +190,9 @@ static int __cpu_launch(unsigned int cpu, struct task_desc *idle)
 	//TODO
 	printk("xby_debug in __cpu_launch, %d.\n", cpu);
 
-	salve_cpu_data.stack = task_stack_bottom(idle) + THREAD_START_SP;
-	salve_cpu_data.cpu = cpu;
-	__flush_dcache_area(&salve_cpu_data, sizeof(salve_cpu_data));
+	slave_cpu_data.stack = task_stack_bottom(idle) + THREAD_START_SP;
+	slave_cpu_data.cpu = cpu;
+	__flush_dcache_area(&slave_cpu_data, sizeof(slave_cpu_data));
 
 	ret = boot_secondary(cpu, idle);
 	if (ret == 0) {
@@ -206,7 +206,7 @@ static int __cpu_launch(unsigned int cpu, struct task_desc *idle)
 		pr_err("CPU%u: failed to boot: %d\n", cpu, ret);
 	}
 
-	salve_cpu_data.stack = NULL;
+	slave_cpu_data.stack = NULL;
 
 	return ret;
 }
