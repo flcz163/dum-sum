@@ -573,7 +573,7 @@ static inline int page_is_buddy(struct page_frame *page, int order)
  * base-纯粹由于效率的原因而引入。其实可以从其他三个参数计算得出。
  * 该函数假定调用者已经禁止本地中断并获得了自旋锁。
  */
-static noinline void __free_pages_nochche (struct page_frame *page,
+static noinline void __free_pages_nocache (struct page_frame *page,
 		struct page_area *pg_area, unsigned int order)
 {
 	/**
@@ -701,7 +701,7 @@ static void fastcall free_page_to_cache(struct page_frame *page, int cache_idx)
 	local_irq_save(flags);
 	/**
 	 * 如果缓存的页框太多，就清除一些。
-	 * 调用free_pages_nochche将这些页面释放给伙伴系统。
+	 * 调用free_pages_nocache将这些页面释放给伙伴系统。
 	 */
 	if (cache->count >= cache->high) {
 		struct page_frame *tmp;
@@ -719,7 +719,7 @@ static void fastcall free_page_to_cache(struct page_frame *page, int cache_idx)
 		while (!list_is_empty(&cache->list) && count--) {
 			tmp = list_container(cache->list.prev, struct page_frame, cache_list);
 			list_del(&tmp->cache_list);
-			__free_pages_nochche(tmp, pg_area, 0);
+			__free_pages_nocache(tmp, pg_area, 0);
 			real_count++;
 		}
 		smp_unlock(&pg_area->lock);
@@ -772,7 +772,7 @@ void free_page_frames(struct page_frame *page, unsigned int order)
 			unsigned long flags;
 
 			smp_lock_irqsave(&pg_area->lock, flags);
-			__free_pages_nochche(page, pg_area, order);
+			__free_pages_nocache(page, pg_area, order);
 			smp_unlock_irqrestore(&pg_area->lock, flags);
 		}
 	}
